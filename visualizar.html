@@ -9,11 +9,11 @@ window.onload = function () {
         return;
     }
 
-    const nome = decodeURIComponent(arquivo);
-
-    document.getElementById("frame").src = "pdfs/" + nome;
+    // NÃO decodificar novamente
+    document.getElementById("frame").src = "pdfs/" + arquivo;
 
     document.getElementById("titulo").innerText =
-        nome.replace(".pdf", "").replace(" - ", " / ");
+        arquivo.replace(".pdf", "").replace(" - ", " / ");
 };
 </script>
+
