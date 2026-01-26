@@ -71,11 +71,29 @@ window.onload = function () {
     <div id="titulo" class="titulo">Resultado</div>
 </div>
 
-<embed
-    id="pdfViewer"
-    class="viewer"
-    type="application/pdf"
->
+<div id="pdf-container"></div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const arquivo = params.get("pdf");
+
+const pdfUrl = "pdfs/" + arquivo;
+const container = document.getElementById("pdf-container");
+
+const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+if (isMobile) {
+    // MOBILE: abre PDF diretamente
+    window.location.href = pdfUrl;
+} else {
+    // DESKTOP: embute PDF
+    container.innerHTML = `
+        <embed src="${pdfUrl}"
+               type="application/pdf"
+               style="width:100%; height:100vh;">
+    `;
+}
+</script>
 
 </body>
 </html>
