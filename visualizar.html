@@ -1,0 +1,19 @@
+<script>
+window.onload = function () {
+    const params = new URLSearchParams(window.location.search);
+    const arquivo = params.get("pdf");
+
+    if (!arquivo) {
+        document.getElementById("titulo").innerText =
+            "Arquivo não informado";
+        return;
+    }
+
+    const nome = decodeURIComponent(arquivo);
+
+    document.getElementById("frame").src = "pdfs/" + nome;
+
+    document.getElementById("titulo").innerText =
+        nome.replace(".pdf", "").replace(" - ", " / ");
+};
+</script>
