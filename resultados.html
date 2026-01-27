@@ -24,7 +24,8 @@ header,footer{position:fixed;left:0;right:0;background:#0b3c6d;color:#fff;z-inde
 header{top:0;padding:14px;text-align:center;font-size:20px;font-weight:bold}
 footer{bottom:0;padding:12px;text-align:center}
 
-.container{padding:90px 10px 120px}
+.container{padding:90px 10px 170px;}
+.table-wrap{padding-bottom: 20px;}
 .controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
 select,input,button{padding:10px;font-size:16px}
 select,input{flex:1}
@@ -88,12 +89,21 @@ th,td{font-size:12px;padding:6px}
 </div>
 
 <footer>
-💙 Sua doação mantém o projeto ativo e em constante melhoria.<br>
-<strong>Chave Pix:</strong> pauloguimor@yahoo.com.br<br>
+  💙 Sua doação mantém o projeto ativo e em constante melhoria.<br>
+  <strong>Chave Pix:</strong> pauloguimor@yahoo.com.br<br>
+  <button class="pix-btn" onclick="copiarPix()">💚 Copiar Pix</button><br>
+          (qualquer valor faz diferença)<br>
+  <hr style="margin:10px 0; opacity:0.4">
 
-(qualquer valor faz diferença)<br>
+  <strong>Dúvidas ou sugestões?</strong><br>
+  Se encontrar alguma inconsistência ou tiver sugestões de melhoria,<br>
+  fale comigo pelo WhatsApp:<br>
 
-<button class="pix-btn" onclick="copiarPix()">💚 Copiar Pix</button>
+  <a href="https://wa.me/5535992424677?text=Olá,%20estou%20com%20dúvida%20sobre%20os%20resultados%20do%20site."
+     target="_blank"
+     style="color:#25D366; font-weight:bold; text-decoration:none;">
+     👉 Clique aqui para conversar no WhatsApp
+  </a>
 </footer>
 
 <script>
