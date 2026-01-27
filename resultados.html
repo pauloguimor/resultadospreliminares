@@ -1,1149 +1,192 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="UTF-8">
-<title>Resultados Preliminares</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body{font-family:Arial;background:#f4f4f4;margin:0}
-.topbar{position:fixed;top:0;left:0;width:100%;background:#fff;padding:12px 20px;display:flex;gap:15px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
-.botao-voltar{padding:8px 16px;background:#6c757d;color:#fff;text-decoration:none;border-radius:5px;font-weight:bold}
-#filtro{flex:1;max-width:400px;padding:10px;font-size:16px}
-.container{max-width:1100px;margin:110px auto;background:#fff;padding:30px}
-.lista{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:15px}
-.botao{display:block;padding:15px;background:#0066cc;color:#fff;text-decoration:none;text-align:center;border-radius:6px;font-weight:bold;text-transform:uppercase}
-</style>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-XPDH340MT4"></script>
 <script>
-function filtrar(){let t=document.getElementById("filtro").value.toLowerCase();document.querySelectorAll(".botao").forEach(b=>b.style.display=b.innerText.toLowerCase().includes(t)?"block":"none")}
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-XPDH340MT4');
 </script>
+
+<meta charset="UTF-8">
+<title>Resultados – SEE/MG</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- PapaParse -->
+<script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+<style>
+body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8}
+header,footer{position:fixed;left:0;right:0;background:#0b3c6d;color:#fff;z-index:100}
+header{top:0;padding:14px;text-align:center;font-size:20px;font-weight:bold}
+footer{bottom:0;padding:12px;text-align:center}
+
+.container{padding:90px 10px 120px}
+.controls{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+select,input,button{padding:10px;font-size:16px}
+select,input{flex:1}
+
+.table-wrap{max-height:65vh;overflow:auto;background:#fff;border-radius:6px}
+table{border-collapse:collapse;width:100%;min-width:900px}
+th,td{border:1px solid #ccc;padding:8px;text-align:center;font-size:14px}
+th{background:#eee;position:sticky;top:0}
+
+.status-aprovado{background:#2ecc71;color:#fff;padding:4px 8px;border-radius:6px}
+.status-outro{background:#aaa;color:#fff;padding:4px 8px;border-radius:6px}
+
+.pix-btn{background:#2ecc71;color:#fff;border:none;padding:10px 18px;
+border-radius:6px;font-size:16px;cursor:pointer;margin-top:6px}
+
+#loading{text-align:center;font-size:18px;margin-top:40px}
+#erro-container{display:none;text-align:center}
+
+@media(max-width:768px){
+table{min-width:700px}
+th,td{font-size:12px;padding:6px}
+}
+</style>
 </head>
+
 <body>
-<div class="topbar">
-<a href="index.html" class="botao-voltar">⬅️ Início</a>
-<input id="filtro" onkeyup="filtrar()" placeholder="Filtrar...">
+
+<header>Resultados – SEE/MG</header>
+
+<div class="container">
+
+<div class="controls">
+<select id="selCargo" disabled></select>
+<select id="selSRE" disabled></select>
+<input id="busca" placeholder="Digite o nome do candidato">
+<button onclick="aplicarFiltro()">Ver Resultado</button>
 </div>
-<div class="container"><div class="lista">
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-ALMENARA.pdf'>ADMINISTRATIVO PEDAGOGICO ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-ARACUAI.pdf'>ADMINISTRATIVO PEDAGOGICO ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-BARBACENA.pdf'>ADMINISTRATIVO PEDAGOGICO BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-CAMPO-BELO.pdf'>ADMINISTRATIVO PEDAGOGICO CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-CARANGOLA.pdf'>ADMINISTRATIVO PEDAGOGICO CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-CARATINGA.pdf'>ADMINISTRATIVO PEDAGOGICO CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-CAXAMBU.pdf'>ADMINISTRATIVO PEDAGOGICO CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-CONSELHEIRO-LAFAIETE.pdf'>ADMINISTRATIVO PEDAGOGICO CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-CORONEL-FABRICIANO.pdf'>ADMINISTRATIVO PEDAGOGICO CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-CURVELO.pdf'>ADMINISTRATIVO PEDAGOGICO CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-DIAMANTINA.pdf'>ADMINISTRATIVO PEDAGOGICO DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-DIVINOPOLIS.pdf'>ADMINISTRATIVO PEDAGOGICO DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-GOVERNADOR-VALADARES.pdf'>ADMINISTRATIVO PEDAGOGICO GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-GUANHAES.pdf'>ADMINISTRATIVO PEDAGOGICO GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-ITAJUBA.pdf'>ADMINISTRATIVO PEDAGOGICO ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-ITUIUTABA.pdf'>ADMINISTRATIVO PEDAGOGICO ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-JANAUBA.pdf'>ADMINISTRATIVO PEDAGOGICO JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-JANUARIA.pdf'>ADMINISTRATIVO PEDAGOGICO JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-JUIZ-DE-FORA.pdf'>ADMINISTRATIVO PEDAGOGICO JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-LEOPOLDINA.pdf'>ADMINISTRATIVO PEDAGOGICO LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-MANHUACU.pdf'>ADMINISTRATIVO PEDAGOGICO MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-METROPOLITANA-A.pdf'>ADMINISTRATIVO PEDAGOGICO METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-METROPOLITANA-B.pdf'>ADMINISTRATIVO PEDAGOGICO METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-METROPOLITANA-C.pdf'>ADMINISTRATIVO PEDAGOGICO METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-MONTE-CARMELO.pdf'>ADMINISTRATIVO PEDAGOGICO MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-MONTES-CLAROS.pdf'>ADMINISTRATIVO PEDAGOGICO MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-MURIAE.pdf'>ADMINISTRATIVO PEDAGOGICO MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-NOVA-ERA.pdf'>ADMINISTRATIVO PEDAGOGICO NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-OURO-PRETO.pdf'>ADMINISTRATIVO PEDAGOGICO OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-PARACATU.pdf'>ADMINISTRATIVO PEDAGOGICO PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-PARA-DE-MINAS.pdf'>ADMINISTRATIVO PEDAGOGICO PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-PASSOS.pdf'>ADMINISTRATIVO PEDAGOGICO PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-PATOS-DE-MINAS.pdf'>ADMINISTRATIVO PEDAGOGICO PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-PATROCINIO.pdf'>ADMINISTRATIVO PEDAGOGICO PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-PIRAPORA.pdf'>ADMINISTRATIVO PEDAGOGICO PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-POCOS-DE-CALDAS.pdf'>ADMINISTRATIVO PEDAGOGICO POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-PONTE-NOVA.pdf'>ADMINISTRATIVO PEDAGOGICO PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-POUSO-ALEGRE.pdf'>ADMINISTRATIVO PEDAGOGICO POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-SAO-JOAO-DEL-REI.pdf'>ADMINISTRATIVO PEDAGOGICO SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-SAO-SEBASTIAO-DO-PARAISO.pdf'>ADMINISTRATIVO PEDAGOGICO SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-SETE-LAGOAS.pdf'>ADMINISTRATIVO PEDAGOGICO SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-TEOFILO-OTONI.pdf'>ADMINISTRATIVO PEDAGOGICO TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-UBA.pdf'>ADMINISTRATIVO PEDAGOGICO UBA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-UBERABA.pdf'>ADMINISTRATIVO PEDAGOGICO UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-UBERLANDIA.pdf'>ADMINISTRATIVO PEDAGOGICO UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-UNAI.pdf'>ADMINISTRATIVO PEDAGOGICO UNAI</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-UNIDADE-CENTRAL.pdf'>ADMINISTRATIVO PEDAGOGICO UNIDADE CENTRAL</a>
-<a class='botao' href='visualizar.html?pdf=ADMINISTRATIVO-PEDAGOGICO-VARGINHA.pdf'>ADMINISTRATIVO PEDAGOGICO VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-ALMENARA.pdf'>AEE ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-ARACUAI.pdf'>AEE ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=AEE-BARBACENA.pdf'>AEE BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-CAMPO-BELO.pdf'>AEE CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=AEE-CARANGOLA.pdf'>AEE CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-CARATINGA.pdf'>AEE CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-CAXAMBU.pdf'>AEE CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=AEE-CONSELHEIRO-LAFAIETE.pdf'>AEE CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=AEE-CORONEL-FABRICIANO.pdf'>AEE CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=AEE-CURVELO.pdf'>AEE CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=AEE-DIAMANTINA.pdf'>AEE DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-DIVINOPOLIS.pdf'>AEE DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=AEE-GOVERNADOR-VALADARES.pdf'>AEE GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=AEE-GUANHAES.pdf'>AEE GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=AEE-ITAJUBA.pdf'>AEE ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-ITUIUTABA.pdf'>AEE ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-JANAUBA.pdf'>AEE JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-JANUARIA.pdf'>AEE JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-JUIZ-DE-FORA.pdf'>AEE JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-LEOPOLDINA.pdf'>AEE LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-MANHUACU.pdf'>AEE MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=AEE-METROPOLITANA-A.pdf'>AEE METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=AEE-METROPOLITANA-B.pdf'>AEE METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=AEE-METROPOLITANA-C.pdf'>AEE METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=AEE-MONTE-CARMELO.pdf'>AEE MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=AEE-MONTES-CLAROS.pdf'>AEE MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=AEE-MURIAE.pdf'>AEE MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=AEE-NOVA-ERA.pdf'>AEE NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-OURO-PRETO.pdf'>AEE OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=AEE-PARACATU.pdf'>AEE PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=AEE-PARA-DE-MINAS.pdf'>AEE PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=AEE-PASSOS.pdf'>AEE PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=AEE-PATOS-DE-MINAS.pdf'>AEE PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=AEE-PATROCINIO.pdf'>AEE PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=AEE-PIRAPORA.pdf'>AEE PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-POCOS-DE-CALDAS.pdf'>AEE POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=AEE-PONTE-NOVA.pdf'>AEE PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-POUSO-ALEGRE.pdf'>AEE POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=AEE-SAO-JOAO-DEL-REI.pdf'>AEE SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=AEE-SAO-SEBASTIAO-DO-PARAISO.pdf'>AEE SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=AEE-SETE-LAGOAS.pdf'>AEE SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=AEE-TEOFILO-OTONI.pdf'>AEE TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=AEE-UBA.pdf'>AEE UBA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-UBERABA.pdf'>AEE UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-UBERLANDIA.pdf'>AEE UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=AEE-UNAI.pdf'>AEE UNAI</a>
-<a class='botao' href='visualizar.html?pdf=AEE-VARGINHA.pdf'>AEE VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-ALMENARA.pdf'>ARTE ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-ARACUAI.pdf'>ARTE ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-BARBACENA.pdf'>ARTE BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-CAMPO-BELO.pdf'>ARTE CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-CARANGOLA.pdf'>ARTE CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-CARATINGA.pdf'>ARTE CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-CAXAMBU.pdf'>ARTE CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-CONSELHEIRO-LAFAIETE.pdf'>ARTE CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-CORONEL-FABRICIANO.pdf'>ARTE CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-CURVELO.pdf'>ARTE CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-DIAMANTINA.pdf'>ARTE DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-DIVINOPOLIS.pdf'>ARTE DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-GOVERNADOR-VALADARES.pdf'>ARTE GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-GUANHAES.pdf'>ARTE GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-ITAJUBA.pdf'>ARTE ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-ITUIUTABA.pdf'>ARTE ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-JANAUBA.pdf'>ARTE JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-JANUARIA.pdf'>ARTE JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-JUIZ-DE-FORA.pdf'>ARTE JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-LEOPOLDINA.pdf'>ARTE LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-MANHUACU.pdf'>ARTE MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-METROPOLITANA-A.pdf'>ARTE METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-METROPOLITANA-B.pdf'>ARTE METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-METROPOLITANA-C.pdf'>ARTE METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-MONTE-CARMELO.pdf'>ARTE MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-MONTES-CLAROS.pdf'>ARTE MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-MURIAE.pdf'>ARTE MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-NOVA-ERA.pdf'>ARTE NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-OURO-PRETO.pdf'>ARTE OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-PARACATU.pdf'>ARTE PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-PARA-DE-MINAS.pdf'>ARTE PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-PASSOS.pdf'>ARTE PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-PATOS-DE-MINAS.pdf'>ARTE PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-PATROCINIO.pdf'>ARTE PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-PIRAPORA.pdf'>ARTE PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-POCOS-DE-CALDAS.pdf'>ARTE POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-PONTE-NOVA.pdf'>ARTE PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-POUSO-ALEGRE.pdf'>ARTE POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-SAO-JOAO-DEL-REI.pdf'>ARTE SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-SAO-SEBASTIAO-DO-PARAISO.pdf'>ARTE SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-SETE-LAGOAS.pdf'>ARTE SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-TEOFILO-OTONI.pdf'>ARTE TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-UBA.pdf'>ARTE UBA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-UBERABA.pdf'>ARTE UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-UBERLANDIA.pdf'>ARTE UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-UNAI.pdf'>ARTE UNAI</a>
-<a class='botao' href='visualizar.html?pdf=ARTE-VARGINHA.pdf'>ARTE VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-ALMENARA.pdf'>ASSISTENTE SOCIAL ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-ARACUAI.pdf'>ASSISTENTE SOCIAL ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-BARBACENA.pdf'>ASSISTENTE SOCIAL BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-CAMPO-BELO.pdf'>ASSISTENTE SOCIAL CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-CARANGOLA.pdf'>ASSISTENTE SOCIAL CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-CARATINGA.pdf'>ASSISTENTE SOCIAL CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-CAXAMBU.pdf'>ASSISTENTE SOCIAL CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-CONSELHEIRO-LAFAIETE.pdf'>ASSISTENTE SOCIAL CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-CORONEL-FABRICIANO.pdf'>ASSISTENTE SOCIAL CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-CURVELO.pdf'>ASSISTENTE SOCIAL CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-DIAMANTINA.pdf'>ASSISTENTE SOCIAL DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-DIVINOPOLIS.pdf'>ASSISTENTE SOCIAL DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-GOVERNADOR-VALADARES.pdf'>ASSISTENTE SOCIAL GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-GUANHAES.pdf'>ASSISTENTE SOCIAL GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-ITAJUBA.pdf'>ASSISTENTE SOCIAL ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-ITUIUTABA.pdf'>ASSISTENTE SOCIAL ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-JANAUBA.pdf'>ASSISTENTE SOCIAL JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-JANUARIA.pdf'>ASSISTENTE SOCIAL JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-JUIZ-DE-FORA.pdf'>ASSISTENTE SOCIAL JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-LEOPOLDINA.pdf'>ASSISTENTE SOCIAL LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-MANHUACU.pdf'>ASSISTENTE SOCIAL MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-METROPOLITANA-A.pdf'>ASSISTENTE SOCIAL METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-METROPOLITANA-B.pdf'>ASSISTENTE SOCIAL METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-METROPOLITANA-C.pdf'>ASSISTENTE SOCIAL METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-MONTE-CARMELO.pdf'>ASSISTENTE SOCIAL MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-MONTES-CLAROS.pdf'>ASSISTENTE SOCIAL MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-MURIAE.pdf'>ASSISTENTE SOCIAL MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-NOVA-ERA.pdf'>ASSISTENTE SOCIAL NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-OURO-PRETO.pdf'>ASSISTENTE SOCIAL OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-PARACATU.pdf'>ASSISTENTE SOCIAL PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-PARA-DE-MINAS.pdf'>ASSISTENTE SOCIAL PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-PASSOS.pdf'>ASSISTENTE SOCIAL PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-PATOS-DE-MINAS.pdf'>ASSISTENTE SOCIAL PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-PATROCINIO.pdf'>ASSISTENTE SOCIAL PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-PIRAPORA.pdf'>ASSISTENTE SOCIAL PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-POCOS-DE-CALDAS.pdf'>ASSISTENTE SOCIAL POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-PONTE-NOVA.pdf'>ASSISTENTE SOCIAL PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-POUSO-ALEGRE.pdf'>ASSISTENTE SOCIAL POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-SAO-JOAO-DEL-REI.pdf'>ASSISTENTE SOCIAL SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-SAO-SEBASTIAO-DO-PARAISO.pdf'>ASSISTENTE SOCIAL SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-SETE-LAGOAS.pdf'>ASSISTENTE SOCIAL SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-TEOFILO-OTONI.pdf'>ASSISTENTE SOCIAL TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-UBA.pdf'>ASSISTENTE SOCIAL UBA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-UBERABA.pdf'>ASSISTENTE SOCIAL UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-UBERLANDIA.pdf'>ASSISTENTE SOCIAL UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-UNAI.pdf'>ASSISTENTE SOCIAL UNAI</a>
-<a class='botao' href='visualizar.html?pdf=ASSISTENTE-SOCIAL-VARGINHA.pdf'>ASSISTENTE SOCIAL VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-ALMENARA.pdf'>ATB ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-ARACUAI.pdf'>ATB ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=ATB-BARBACENA.pdf'>ATB BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-CAMPO-BELO.pdf'>ATB CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=ATB-CARANGOLA.pdf'>ATB CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-CARATINGA.pdf'>ATB CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-CAXAMBU.pdf'>ATB CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=ATB-CONSELHEIRO-LAFAIETE.pdf'>ATB CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=ATB-CORONEL-FABRICIANO.pdf'>ATB CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=ATB-CURVELO.pdf'>ATB CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=ATB-DIAMANTINA.pdf'>ATB DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-DIVINOPOLIS.pdf'>ATB DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=ATB-GOVERNADOR-VALADARES.pdf'>ATB GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=ATB-GUANHAES.pdf'>ATB GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=ATB-ITAJUBA.pdf'>ATB ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-ITUIUTABA.pdf'>ATB ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-JANAUBA.pdf'>ATB JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-JANUARIA.pdf'>ATB JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-JUIZ-DE-FORA.pdf'>ATB JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-LEOPOLDINA.pdf'>ATB LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-MANHUACU.pdf'>ATB MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=ATB-METROPOLITANA-A.pdf'>ATB METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=ATB-METROPOLITANA-B.pdf'>ATB METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=ATB-METROPOLITANA-C.pdf'>ATB METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=ATB-MONTE-CARMELO.pdf'>ATB MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=ATB-MONTES-CLAROS.pdf'>ATB MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=ATB-MURIAE.pdf'>ATB MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=ATB-NOVA-ERA.pdf'>ATB NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-OURO-PRETO.pdf'>ATB OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=ATB-PARACATU.pdf'>ATB PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=ATB-PARA-DE-MINAS.pdf'>ATB PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=ATB-PASSOS.pdf'>ATB PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=ATB-PATOS-DE-MINAS.pdf'>ATB PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=ATB-PATROCINIO.pdf'>ATB PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=ATB-PIRAPORA.pdf'>ATB PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-POCOS-DE-CALDAS.pdf'>ATB POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=ATB-PONTE-NOVA.pdf'>ATB PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-POUSO-ALEGRE.pdf'>ATB POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=ATB-SAO-JOAO-DEL-REI.pdf'>ATB SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=ATB-SAO-SEBASTIAO-DO-PARAISO.pdf'>ATB SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=ATB-SETE-LAGOAS.pdf'>ATB SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=ATB-TEOFILO-OTONI.pdf'>ATB TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=ATB-UBA.pdf'>ATB UBA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-UBERABA.pdf'>ATB UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-UBERLANDIA.pdf'>ATB UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=ATB-UNAI.pdf'>ATB UNAI</a>
-<a class='botao' href='visualizar.html?pdf=ATB-VARGINHA.pdf'>ATB VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-ALMENARA.pdf'>BIBLIOTECARIO ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-ARACUAI.pdf'>BIBLIOTECARIO ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-BARBACENA.pdf'>BIBLIOTECARIO BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-CAMPO-BELO.pdf'>BIBLIOTECARIO CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-CARANGOLA.pdf'>BIBLIOTECARIO CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-CARATINGA.pdf'>BIBLIOTECARIO CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-CAXAMBU.pdf'>BIBLIOTECARIO CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-CONSELHEIRO-LAFAIETE.pdf'>BIBLIOTECARIO CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-CORONEL-FABRICIANO.pdf'>BIBLIOTECARIO CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-CURVELO.pdf'>BIBLIOTECARIO CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-DIAMANTINA.pdf'>BIBLIOTECARIO DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-DIVINOPOLIS.pdf'>BIBLIOTECARIO DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-GOVERNADOR-VALADARES.pdf'>BIBLIOTECARIO GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-GUANHAES.pdf'>BIBLIOTECARIO GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-ITAJUBA.pdf'>BIBLIOTECARIO ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-ITUIUTABA.pdf'>BIBLIOTECARIO ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-JANAUBA.pdf'>BIBLIOTECARIO JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-JANUARIA.pdf'>BIBLIOTECARIO JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-JUIZ-DE-FORA.pdf'>BIBLIOTECARIO JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-LEOPOLDINA.pdf'>BIBLIOTECARIO LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-MANHUACU.pdf'>BIBLIOTECARIO MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-METROPOLITANA-A.pdf'>BIBLIOTECARIO METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-METROPOLITANA-B.pdf'>BIBLIOTECARIO METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-METROPOLITANA-C.pdf'>BIBLIOTECARIO METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-MONTE-CARMELO.pdf'>BIBLIOTECARIO MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-MONTES-CLAROS.pdf'>BIBLIOTECARIO MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-MURIAE.pdf'>BIBLIOTECARIO MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-NOVA-ERA.pdf'>BIBLIOTECARIO NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-OURO-PRETO.pdf'>BIBLIOTECARIO OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-PARACATU.pdf'>BIBLIOTECARIO PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-PARA-DE-MINAS.pdf'>BIBLIOTECARIO PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-PASSOS.pdf'>BIBLIOTECARIO PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-PATOS-DE-MINAS.pdf'>BIBLIOTECARIO PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-PATROCINIO.pdf'>BIBLIOTECARIO PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-PIRAPORA.pdf'>BIBLIOTECARIO PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-POCOS-DE-CALDAS.pdf'>BIBLIOTECARIO POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-PONTE-NOVA.pdf'>BIBLIOTECARIO PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-POUSO-ALEGRE.pdf'>BIBLIOTECARIO POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-SAO-JOAO-DEL-REI.pdf'>BIBLIOTECARIO SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-SAO-SEBASTIAO-DO-PARAISO.pdf'>BIBLIOTECARIO SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-SETE-LAGOAS.pdf'>BIBLIOTECARIO SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-TEOFILO-OTONI.pdf'>BIBLIOTECARIO TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-UBA.pdf'>BIBLIOTECARIO UBA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-UBERABA.pdf'>BIBLIOTECARIO UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-UBERLANDIA.pdf'>BIBLIOTECARIO UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-UNAI.pdf'>BIBLIOTECARIO UNAI</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-UNIDADE-CENTRAL.pdf'>BIBLIOTECARIO UNIDADE CENTRAL</a>
-<a class='botao' href='visualizar.html?pdf=BIBLIOTECARIO-VARGINHA.pdf'>BIBLIOTECARIO VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-ALMENARA.pdf'>BIOLOGIA ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-ARACUAI.pdf'>BIOLOGIA ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-BARBACENA.pdf'>BIOLOGIA BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-CAMPO-BELO.pdf'>BIOLOGIA CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-CARANGOLA.pdf'>BIOLOGIA CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-CARATINGA.pdf'>BIOLOGIA CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-CAXAMBU.pdf'>BIOLOGIA CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-CONSELHEIRO-LAFAIETE.pdf'>BIOLOGIA CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-CORONEL-FABRICIANO.pdf'>BIOLOGIA CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-CURVELO.pdf'>BIOLOGIA CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-DIAMANTINA.pdf'>BIOLOGIA DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-DIVINOPOLIS.pdf'>BIOLOGIA DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-GOVERNADOR-VALADARES.pdf'>BIOLOGIA GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-GUANHAES.pdf'>BIOLOGIA GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-ITAJUBA.pdf'>BIOLOGIA ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-ITUIUTABA.pdf'>BIOLOGIA ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-JANAUBA.pdf'>BIOLOGIA JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-JANUARIA.pdf'>BIOLOGIA JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-JUIZ-DE-FORA.pdf'>BIOLOGIA JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-LEOPOLDINA.pdf'>BIOLOGIA LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-MANHUACU.pdf'>BIOLOGIA MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-METROPOLITANA-A.pdf'>BIOLOGIA METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-METROPOLITANA-B.pdf'>BIOLOGIA METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-METROPOLITANA-C.pdf'>BIOLOGIA METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-MONTE-CARMELO.pdf'>BIOLOGIA MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-MONTES-CLAROS.pdf'>BIOLOGIA MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-MURIAE.pdf'>BIOLOGIA MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-NOVA-ERA.pdf'>BIOLOGIA NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-OURO-PRETO.pdf'>BIOLOGIA OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-PARACATU.pdf'>BIOLOGIA PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-PARA-DE-MINAS.pdf'>BIOLOGIA PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-PASSOS.pdf'>BIOLOGIA PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-PATOS-DE-MINAS.pdf'>BIOLOGIA PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-PATROCINIO.pdf'>BIOLOGIA PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-PIRAPORA.pdf'>BIOLOGIA PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-POCOS-DE-CALDAS.pdf'>BIOLOGIA POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-PONTE-NOVA.pdf'>BIOLOGIA PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-POUSO-ALEGRE.pdf'>BIOLOGIA POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-SAO-JOAO-DEL-REI.pdf'>BIOLOGIA SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-SAO-SEBASTIAO-DO-PARAISO.pdf'>BIOLOGIA SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-SETE-LAGOAS.pdf'>BIOLOGIA SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-TEOFILO-OTONI.pdf'>BIOLOGIA TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-UBA.pdf'>BIOLOGIA UBA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-UBERABA.pdf'>BIOLOGIA UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-UBERLANDIA.pdf'>BIOLOGIA UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-UNAI.pdf'>BIOLOGIA UNAI</a>
-<a class='botao' href='visualizar.html?pdf=BIOLOGIA-VARGINHA.pdf'>BIOLOGIA VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-ALMENARA.pdf'>EDUCACAO FISICA ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-ARACUAI.pdf'>EDUCACAO FISICA ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-BARBACENA.pdf'>EDUCACAO FISICA BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-CAMPO-BELO.pdf'>EDUCACAO FISICA CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-CARANGOLA.pdf'>EDUCACAO FISICA CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-CARATINGA.pdf'>EDUCACAO FISICA CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-CAXAMBU.pdf'>EDUCACAO FISICA CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-CONSELHEIRO-LAFAIETE.pdf'>EDUCACAO FISICA CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-CORONEL-FABRICIANO.pdf'>EDUCACAO FISICA CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-CURVELO.pdf'>EDUCACAO FISICA CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-DIAMANTINA.pdf'>EDUCACAO FISICA DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-DIVINOPOLIS.pdf'>EDUCACAO FISICA DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-GOVERNADOR-VALADARES.pdf'>EDUCACAO FISICA GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-GUANHAES.pdf'>EDUCACAO FISICA GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-ITAJUBA.pdf'>EDUCACAO FISICA ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-ITUIUTABA.pdf'>EDUCACAO FISICA ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-JANAUBA.pdf'>EDUCACAO FISICA JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-JANUARIA.pdf'>EDUCACAO FISICA JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-JUIZ-DE-FORA.pdf'>EDUCACAO FISICA JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-LEOPOLDINA.pdf'>EDUCACAO FISICA LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-MANHUACU.pdf'>EDUCACAO FISICA MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-METROPOLITANA-A.pdf'>EDUCACAO FISICA METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-METROPOLITANA-B.pdf'>EDUCACAO FISICA METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-METROPOLITANA-C.pdf'>EDUCACAO FISICA METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-MONTE-CARMELO.pdf'>EDUCACAO FISICA MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-MONTES-CLAROS.pdf'>EDUCACAO FISICA MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-MURIAE.pdf'>EDUCACAO FISICA MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-NOVA-ERA.pdf'>EDUCACAO FISICA NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-OURO-PRETO.pdf'>EDUCACAO FISICA OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-PARACATU.pdf'>EDUCACAO FISICA PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-PARA-DE-MINAS.pdf'>EDUCACAO FISICA PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-PASSOS.pdf'>EDUCACAO FISICA PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-PATOS-DE-MINAS.pdf'>EDUCACAO FISICA PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-PATROCINIO.pdf'>EDUCACAO FISICA PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-PIRAPORA.pdf'>EDUCACAO FISICA PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-POCOS-DE-CALDAS.pdf'>EDUCACAO FISICA POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-PONTE-NOVA.pdf'>EDUCACAO FISICA PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-POUSO-ALEGRE.pdf'>EDUCACAO FISICA POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-SAO-JOAO-DEL-REI.pdf'>EDUCACAO FISICA SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-SAO-SEBASTIAO-DO-PARAISO.pdf'>EDUCACAO FISICA SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-SETE-LAGOAS.pdf'>EDUCACAO FISICA SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-TEOFILO-OTONI.pdf'>EDUCACAO FISICA TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-UBA.pdf'>EDUCACAO FISICA UBA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-UBERABA.pdf'>EDUCACAO FISICA UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-UBERLANDIA.pdf'>EDUCACAO FISICA UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-UNAI.pdf'>EDUCACAO FISICA UNAI</a>
-<a class='botao' href='visualizar.html?pdf=EDUCACAO-FISICA-VARGINHA.pdf'>EDUCACAO FISICA VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-ALMENARA.pdf'>EEB ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-ARACUAI.pdf'>EEB ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=EEB-BARBACENA.pdf'>EEB BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-CAMPO-BELO.pdf'>EEB CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=EEB-CARANGOLA.pdf'>EEB CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-CARATINGA.pdf'>EEB CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-CAXAMBU.pdf'>EEB CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=EEB-CONSELHEIRO-LAFAIETE.pdf'>EEB CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=EEB-CORONEL-FABRICIANO.pdf'>EEB CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=EEB-CURVELO.pdf'>EEB CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=EEB-DIAMANTINA.pdf'>EEB DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-DIVINOPOLIS.pdf'>EEB DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=EEB-GOVERNADOR-VALADARES.pdf'>EEB GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=EEB-GUANHAES.pdf'>EEB GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=EEB-ITAJUBA.pdf'>EEB ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-ITUIUTABA.pdf'>EEB ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-JANAUBA.pdf'>EEB JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-JANUARIA.pdf'>EEB JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-JUIZ-DE-FORA.pdf'>EEB JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-LEOPOLDINA.pdf'>EEB LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-MANHUACU.pdf'>EEB MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=EEB-METROPOLITANA-A.pdf'>EEB METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=EEB-METROPOLITANA-B.pdf'>EEB METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=EEB-METROPOLITANA-C.pdf'>EEB METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=EEB-MONTE-CARMELO.pdf'>EEB MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=EEB-MONTES-CLAROS.pdf'>EEB MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=EEB-MURIAE.pdf'>EEB MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=EEB-NOVA-ERA.pdf'>EEB NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-OURO-PRETO.pdf'>EEB OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=EEB-PARACATU.pdf'>EEB PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=EEB-PARA-DE-MINAS.pdf'>EEB PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=EEB-PASSOS.pdf'>EEB PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=EEB-PATOS-DE-MINAS.pdf'>EEB PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=EEB-PATROCINIO.pdf'>EEB PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=EEB-PIRAPORA.pdf'>EEB PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-POCOS-DE-CALDAS.pdf'>EEB POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=EEB-PONTE-NOVA.pdf'>EEB PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-POUSO-ALEGRE.pdf'>EEB POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=EEB-SAO-JOAO-DEL-REI.pdf'>EEB SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=EEB-SAO-SEBASTIAO-DO-PARAISO.pdf'>EEB SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=EEB-SETE-LAGOAS.pdf'>EEB SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=EEB-TEOFILO-OTONI.pdf'>EEB TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=EEB-UBA.pdf'>EEB UBA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-UBERABA.pdf'>EEB UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-UBERLANDIA.pdf'>EEB UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=EEB-UNAI.pdf'>EEB UNAI</a>
-<a class='botao' href='visualizar.html?pdf=EEB-VARGINHA.pdf'>EEB VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-ALMENARA.pdf'>ENSINO RELIGIOSO ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-ARACUAI.pdf'>ENSINO RELIGIOSO ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-BARBACENA.pdf'>ENSINO RELIGIOSO BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-CAMPO-BELO.pdf'>ENSINO RELIGIOSO CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-CARANGOLA.pdf'>ENSINO RELIGIOSO CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-CARATINGA.pdf'>ENSINO RELIGIOSO CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-CAXAMBU.pdf'>ENSINO RELIGIOSO CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-CONSELHEIRO-LAFAIETE.pdf'>ENSINO RELIGIOSO CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-CORONEL-FABRICIANO.pdf'>ENSINO RELIGIOSO CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-CURVELO.pdf'>ENSINO RELIGIOSO CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-DIAMANTINA.pdf'>ENSINO RELIGIOSO DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-DIVINOPOLIS.pdf'>ENSINO RELIGIOSO DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-GOVERNADOR-VALADARES.pdf'>ENSINO RELIGIOSO GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-GUANHAES.pdf'>ENSINO RELIGIOSO GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-ITAJUBA.pdf'>ENSINO RELIGIOSO ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-ITUIUTABA.pdf'>ENSINO RELIGIOSO ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-JANAUBA.pdf'>ENSINO RELIGIOSO JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-JANUARIA.pdf'>ENSINO RELIGIOSO JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-JUIZ-DE-FORA.pdf'>ENSINO RELIGIOSO JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-LEOPOLDINA.pdf'>ENSINO RELIGIOSO LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-MANHUACU.pdf'>ENSINO RELIGIOSO MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-METROPOLITANA-A.pdf'>ENSINO RELIGIOSO METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-METROPOLITANA-B.pdf'>ENSINO RELIGIOSO METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-METROPOLITANA-C.pdf'>ENSINO RELIGIOSO METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-MONTE-CARMELO.pdf'>ENSINO RELIGIOSO MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-MONTES-CLAROS.pdf'>ENSINO RELIGIOSO MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-MURIAE.pdf'>ENSINO RELIGIOSO MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-NOVA-ERA.pdf'>ENSINO RELIGIOSO NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-OURO-PRETO.pdf'>ENSINO RELIGIOSO OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-PARACATU.pdf'>ENSINO RELIGIOSO PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-PARA-DE-MINAS.pdf'>ENSINO RELIGIOSO PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-PASSOS.pdf'>ENSINO RELIGIOSO PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-PATOS-DE-MINAS.pdf'>ENSINO RELIGIOSO PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-PATROCINIO.pdf'>ENSINO RELIGIOSO PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-PIRAPORA.pdf'>ENSINO RELIGIOSO PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-POCOS-DE-CALDAS.pdf'>ENSINO RELIGIOSO POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-PONTE-NOVA.pdf'>ENSINO RELIGIOSO PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-POUSO-ALEGRE.pdf'>ENSINO RELIGIOSO POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-SAO-JOAO-DEL-REI.pdf'>ENSINO RELIGIOSO SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-SAO-SEBASTIAO-DO-PARAISO.pdf'>ENSINO RELIGIOSO SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-SETE-LAGOAS.pdf'>ENSINO RELIGIOSO SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-TEOFILO-OTONI.pdf'>ENSINO RELIGIOSO TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-UBA.pdf'>ENSINO RELIGIOSO UBA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-UBERABA.pdf'>ENSINO RELIGIOSO UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-UBERLANDIA.pdf'>ENSINO RELIGIOSO UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-UNAI.pdf'>ENSINO RELIGIOSO UNAI</a>
-<a class='botao' href='visualizar.html?pdf=ENSINO-RELIGIOSO-VARGINHA.pdf'>ENSINO RELIGIOSO VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-ALMENARA.pdf'>FILOSOFIA ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-ARACUAI.pdf'>FILOSOFIA ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-BARBACENA.pdf'>FILOSOFIA BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-CAMPO-BELO.pdf'>FILOSOFIA CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-CARANGOLA.pdf'>FILOSOFIA CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-CARATINGA.pdf'>FILOSOFIA CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-CAXAMBU.pdf'>FILOSOFIA CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-CONSELHEIRO-LAFAIETE.pdf'>FILOSOFIA CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-CORONEL-FABRICIANO.pdf'>FILOSOFIA CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-CURVELO.pdf'>FILOSOFIA CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-DIAMANTINA.pdf'>FILOSOFIA DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-DIVINOPOLIS.pdf'>FILOSOFIA DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-GOVERNADOR-VALADARES.pdf'>FILOSOFIA GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-GUANHAES.pdf'>FILOSOFIA GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-ITAJUBA.pdf'>FILOSOFIA ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-ITUIUTABA.pdf'>FILOSOFIA ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-JANAUBA.pdf'>FILOSOFIA JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-JANUARIA.pdf'>FILOSOFIA JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-JUIZ-DE-FORA.pdf'>FILOSOFIA JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-LEOPOLDINA.pdf'>FILOSOFIA LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-MANHUACU.pdf'>FILOSOFIA MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-METROPOLITANA-A.pdf'>FILOSOFIA METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-METROPOLITANA-B.pdf'>FILOSOFIA METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-METROPOLITANA-C.pdf'>FILOSOFIA METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-MONTE-CARMELO.pdf'>FILOSOFIA MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-MONTES-CLAROS.pdf'>FILOSOFIA MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-MURIAE.pdf'>FILOSOFIA MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-NOVA-ERA.pdf'>FILOSOFIA NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-OURO-PRETO.pdf'>FILOSOFIA OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-PARACATU.pdf'>FILOSOFIA PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-PARA-DE-MINAS.pdf'>FILOSOFIA PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-PASSOS.pdf'>FILOSOFIA PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-PATOS-DE-MINAS.pdf'>FILOSOFIA PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-PATROCINIO.pdf'>FILOSOFIA PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-PIRAPORA.pdf'>FILOSOFIA PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-POCOS-DE-CALDAS.pdf'>FILOSOFIA POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-PONTE-NOVA.pdf'>FILOSOFIA PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-POUSO-ALEGRE.pdf'>FILOSOFIA POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-SAO-JOAO-DEL-REI.pdf'>FILOSOFIA SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-SAO-SEBASTIAO-DO-PARAISO.pdf'>FILOSOFIA SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-SETE-LAGOAS.pdf'>FILOSOFIA SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-TEOFILO-OTONI.pdf'>FILOSOFIA TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-UBA.pdf'>FILOSOFIA UBA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-UBERABA.pdf'>FILOSOFIA UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-UBERLANDIA.pdf'>FILOSOFIA UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-UNAI.pdf'>FILOSOFIA UNAI</a>
-<a class='botao' href='visualizar.html?pdf=FILOSOFIA-VARGINHA.pdf'>FILOSOFIA VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-ALMENARA.pdf'>FISICA ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-ARACUAI.pdf'>FISICA ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-BARBACENA.pdf'>FISICA BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-CAMPO-BELO.pdf'>FISICA CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-CARANGOLA.pdf'>FISICA CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-CARATINGA.pdf'>FISICA CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-CAXAMBU.pdf'>FISICA CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-CONSELHEIRO-LAFAIETE.pdf'>FISICA CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-CORONEL-FABRICIANO.pdf'>FISICA CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-CURVELO.pdf'>FISICA CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-DIAMANTINA.pdf'>FISICA DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-DIVINOPOLIS.pdf'>FISICA DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-GOVERNADOR-VALADARES.pdf'>FISICA GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-GUANHAES.pdf'>FISICA GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-ITAJUBA.pdf'>FISICA ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-ITUIUTABA.pdf'>FISICA ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-JANAUBA.pdf'>FISICA JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-JANUARIA.pdf'>FISICA JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-JUIZ-DE-FORA.pdf'>FISICA JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-LEOPOLDINA.pdf'>FISICA LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-MANHUACU.pdf'>FISICA MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-METROPOLITANA-A.pdf'>FISICA METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-METROPOLITANA-B.pdf'>FISICA METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-METROPOLITANA-C.pdf'>FISICA METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-MONTE-CARMELO.pdf'>FISICA MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-MONTES-CLAROS.pdf'>FISICA MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-MURIAE.pdf'>FISICA MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-NOVA-ERA.pdf'>FISICA NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-OURO-PRETO.pdf'>FISICA OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-PARACATU.pdf'>FISICA PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-PARA-DE-MINAS.pdf'>FISICA PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-PASSOS.pdf'>FISICA PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-PATOS-DE-MINAS.pdf'>FISICA PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-PATROCINIO.pdf'>FISICA PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-PIRAPORA.pdf'>FISICA PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-POCOS-DE-CALDAS.pdf'>FISICA POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-PONTE-NOVA.pdf'>FISICA PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-POUSO-ALEGRE.pdf'>FISICA POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-SAO-JOAO-DEL-REI.pdf'>FISICA SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-SAO-SEBASTIAO-DO-PARAISO.pdf'>FISICA SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-SETE-LAGOAS.pdf'>FISICA SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-TEOFILO-OTONI.pdf'>FISICA TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-UBA.pdf'>FISICA UBA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-UBERABA.pdf'>FISICA UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-UBERLANDIA.pdf'>FISICA UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-UNAI.pdf'>FISICA UNAI</a>
-<a class='botao' href='visualizar.html?pdf=FISICA-VARGINHA.pdf'>FISICA VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-ALMENARA.pdf'>GEOGRAFIA ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-ARACUAI.pdf'>GEOGRAFIA ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-BARBACENA.pdf'>GEOGRAFIA BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-CAMPO-BELO.pdf'>GEOGRAFIA CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-CARANGOLA.pdf'>GEOGRAFIA CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-CARATINGA.pdf'>GEOGRAFIA CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-CAXAMBU.pdf'>GEOGRAFIA CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-CONSELHEIRO-LAFAIETE.pdf'>GEOGRAFIA CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-CORONEL-FABRICIANO.pdf'>GEOGRAFIA CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-CURVELO.pdf'>GEOGRAFIA CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-DIAMANTINA.pdf'>GEOGRAFIA DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-DIVINOPOLIS.pdf'>GEOGRAFIA DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-GOVERNADOR-VALADARES.pdf'>GEOGRAFIA GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-GUANHAES.pdf'>GEOGRAFIA GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-ITAJUBA.pdf'>GEOGRAFIA ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-ITUIUTABA.pdf'>GEOGRAFIA ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-JANAUBA.pdf'>GEOGRAFIA JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-JANUARIA.pdf'>GEOGRAFIA JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-JUIZ-DE-FORA.pdf'>GEOGRAFIA JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-LEOPOLDINA.pdf'>GEOGRAFIA LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-MANHUACU.pdf'>GEOGRAFIA MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-METROPOLITANA-A.pdf'>GEOGRAFIA METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-METROPOLITANA-B.pdf'>GEOGRAFIA METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-METROPOLITANA-C.pdf'>GEOGRAFIA METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-MONTE-CARMELO.pdf'>GEOGRAFIA MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-MONTES-CLAROS.pdf'>GEOGRAFIA MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-MURIAE.pdf'>GEOGRAFIA MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-NOVA-ERA.pdf'>GEOGRAFIA NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-OURO-PRETO.pdf'>GEOGRAFIA OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-PARACATU.pdf'>GEOGRAFIA PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-PARA-DE-MINAS.pdf'>GEOGRAFIA PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-PASSOS.pdf'>GEOGRAFIA PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-PATOS-DE-MINAS.pdf'>GEOGRAFIA PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-PATROCINIO.pdf'>GEOGRAFIA PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-PIRAPORA.pdf'>GEOGRAFIA PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-POCOS-DE-CALDAS.pdf'>GEOGRAFIA POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-PONTE-NOVA.pdf'>GEOGRAFIA PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-POUSO-ALEGRE.pdf'>GEOGRAFIA POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-SAO-JOAO-DEL-REI.pdf'>GEOGRAFIA SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-SAO-SEBASTIAO-DO-PARAISO.pdf'>GEOGRAFIA SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-SETE-LAGOAS.pdf'>GEOGRAFIA SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-TEOFILO-OTONI.pdf'>GEOGRAFIA TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-UBA.pdf'>GEOGRAFIA UBA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-UBERABA.pdf'>GEOGRAFIA UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-UBERLANDIA.pdf'>GEOGRAFIA UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-UNAI.pdf'>GEOGRAFIA UNAI</a>
-<a class='botao' href='visualizar.html?pdf=GEOGRAFIA-VARGINHA.pdf'>GEOGRAFIA VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-ALMENARA.pdf'>HISTORIA ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-ARACUAI.pdf'>HISTORIA ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-BARBACENA.pdf'>HISTORIA BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-CAMPO-BELO.pdf'>HISTORIA CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-CARANGOLA.pdf'>HISTORIA CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-CARATINGA.pdf'>HISTORIA CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-CAXAMBU.pdf'>HISTORIA CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-CONSELHEIRO-LAFAIETE.pdf'>HISTORIA CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-CORONEL-FABRICIANO.pdf'>HISTORIA CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-CURVELO.pdf'>HISTORIA CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-DIAMANTINA.pdf'>HISTORIA DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-DIVINOPOLIS.pdf'>HISTORIA DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-GOVERNADOR-VALADARES.pdf'>HISTORIA GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-GUANHAES.pdf'>HISTORIA GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-ITAJUBA.pdf'>HISTORIA ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-ITUIUTABA.pdf'>HISTORIA ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-JANAUBA.pdf'>HISTORIA JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-JANUARIA.pdf'>HISTORIA JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-JUIZ-DE-FORA.pdf'>HISTORIA JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-LEOPOLDINA.pdf'>HISTORIA LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-MANHUACU.pdf'>HISTORIA MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-METROPOLITANA-A.pdf'>HISTORIA METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-METROPOLITANA-B.pdf'>HISTORIA METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-METROPOLITANA-C.pdf'>HISTORIA METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-MONTE-CARMELO.pdf'>HISTORIA MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-MONTES-CLAROS.pdf'>HISTORIA MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-MURIAE.pdf'>HISTORIA MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-NOVA-ERA.pdf'>HISTORIA NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-OURO-PRETO.pdf'>HISTORIA OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-PARACATU.pdf'>HISTORIA PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-PARA-DE-MINAS.pdf'>HISTORIA PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-PASSOS.pdf'>HISTORIA PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-PATOS-DE-MINAS.pdf'>HISTORIA PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-PATROCINIO.pdf'>HISTORIA PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-PIRAPORA.pdf'>HISTORIA PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-POCOS-DE-CALDAS.pdf'>HISTORIA POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-PONTE-NOVA.pdf'>HISTORIA PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-POUSO-ALEGRE.pdf'>HISTORIA POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-SAO-JOAO-DEL-REI.pdf'>HISTORIA SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-SAO-SEBASTIAO-DO-PARAISO.pdf'>HISTORIA SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-SETE-LAGOAS.pdf'>HISTORIA SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-TEOFILO-OTONI.pdf'>HISTORIA TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-UBA.pdf'>HISTORIA UBA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-UBERABA.pdf'>HISTORIA UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-UBERLANDIA.pdf'>HISTORIA UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-UNAI.pdf'>HISTORIA UNAI</a>
-<a class='botao' href='visualizar.html?pdf=HISTORIA-VARGINHA.pdf'>HISTORIA VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-ALMENARA.pdf'>INGLES ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-ARACUAI.pdf'>INGLES ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-BARBACENA.pdf'>INGLES BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-CAMPO-BELO.pdf'>INGLES CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-CARANGOLA.pdf'>INGLES CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-CARATINGA.pdf'>INGLES CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-CAXAMBU.pdf'>INGLES CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-CONSELHEIRO-LAFAIETE.pdf'>INGLES CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-CORONEL-FABRICIANO.pdf'>INGLES CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-CURVELO.pdf'>INGLES CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-DIAMANTINA.pdf'>INGLES DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-DIVINOPOLIS.pdf'>INGLES DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-GOVERNADOR-VALADARES.pdf'>INGLES GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-GUANHAES.pdf'>INGLES GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-ITAJUBA.pdf'>INGLES ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-ITUIUTABA.pdf'>INGLES ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-JANAUBA.pdf'>INGLES JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-JANUARIA.pdf'>INGLES JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-JUIZ-DE-FORA.pdf'>INGLES JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-LEOPOLDINA.pdf'>INGLES LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-MANHUACU.pdf'>INGLES MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-METROPOLITANA-A.pdf'>INGLES METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-METROPOLITANA-B.pdf'>INGLES METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-METROPOLITANA-C.pdf'>INGLES METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-MONTE-CARMELO.pdf'>INGLES MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-MONTES-CLAROS.pdf'>INGLES MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-MURIAE.pdf'>INGLES MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-NOVA-ERA.pdf'>INGLES NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-OURO-PRETO.pdf'>INGLES OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-PARACATU.pdf'>INGLES PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-PARA-DE-MINAS.pdf'>INGLES PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-PASSOS.pdf'>INGLES PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-PATOS-DE-MINAS.pdf'>INGLES PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-PATROCINIO.pdf'>INGLES PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-PIRAPORA.pdf'>INGLES PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-POCOS-DE-CALDAS.pdf'>INGLES POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-PONTE-NOVA.pdf'>INGLES PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-POUSO-ALEGRE.pdf'>INGLES POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-SAO-JOAO-DEL-REI.pdf'>INGLES SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-SAO-SEBASTIAO-DO-PARAISO.pdf'>INGLES SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-SETE-LAGOAS.pdf'>INGLES SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-TEOFILO-OTONI.pdf'>INGLES TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-UBA.pdf'>INGLES UBA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-UBERABA.pdf'>INGLES UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-UBERLANDIA.pdf'>INGLES UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-UNAI.pdf'>INGLES UNAI</a>
-<a class='botao' href='visualizar.html?pdf=INGLES-VARGINHA.pdf'>INGLES VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-ALMENARA.pdf'>INSPETOR ESCOLAR ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-ARACUAI.pdf'>INSPETOR ESCOLAR ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-BARBACENA.pdf'>INSPETOR ESCOLAR BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-CAMPO-BELO.pdf'>INSPETOR ESCOLAR CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-CARANGOLA.pdf'>INSPETOR ESCOLAR CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-CARATINGA.pdf'>INSPETOR ESCOLAR CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-CAXAMBU.pdf'>INSPETOR ESCOLAR CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-CONSELHEIRO-LAFAIETE.pdf'>INSPETOR ESCOLAR CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-CORONEL-FABRICIANO.pdf'>INSPETOR ESCOLAR CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-CURVELO.pdf'>INSPETOR ESCOLAR CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-DIAMANTINA.pdf'>INSPETOR ESCOLAR DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-DIVINOPOLIS.pdf'>INSPETOR ESCOLAR DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-GOVERNADOR-VALADARES.pdf'>INSPETOR ESCOLAR GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-GUANHAES.pdf'>INSPETOR ESCOLAR GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-ITAJUBA.pdf'>INSPETOR ESCOLAR ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-ITUIUTABA.pdf'>INSPETOR ESCOLAR ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-JANAUBA.pdf'>INSPETOR ESCOLAR JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-JANUARIA.pdf'>INSPETOR ESCOLAR JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-JUIZ-DE-FORA.pdf'>INSPETOR ESCOLAR JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-LEOPOLDINA.pdf'>INSPETOR ESCOLAR LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-MANHUACU.pdf'>INSPETOR ESCOLAR MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-METROPOLITANA-A.pdf'>INSPETOR ESCOLAR METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-METROPOLITANA-B.pdf'>INSPETOR ESCOLAR METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-METROPOLITANA-C.pdf'>INSPETOR ESCOLAR METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-MONTE-CARMELO.pdf'>INSPETOR ESCOLAR MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-MONTES-CLAROS.pdf'>INSPETOR ESCOLAR MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-MURIAE.pdf'>INSPETOR ESCOLAR MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-NOVA-ERA.pdf'>INSPETOR ESCOLAR NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-OURO-PRETO.pdf'>INSPETOR ESCOLAR OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-PARACATU.pdf'>INSPETOR ESCOLAR PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-PARA-DE-MINAS.pdf'>INSPETOR ESCOLAR PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-PASSOS.pdf'>INSPETOR ESCOLAR PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-PATOS-DE-MINAS.pdf'>INSPETOR ESCOLAR PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-PATROCINIO.pdf'>INSPETOR ESCOLAR PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-PIRAPORA.pdf'>INSPETOR ESCOLAR PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-POCOS-DE-CALDAS.pdf'>INSPETOR ESCOLAR POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-PONTE-NOVA.pdf'>INSPETOR ESCOLAR PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-POUSO-ALEGRE.pdf'>INSPETOR ESCOLAR POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-SAO-JOAO-DEL-REI.pdf'>INSPETOR ESCOLAR SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-SAO-SEBASTIAO-DO-PARAISO.pdf'>INSPETOR ESCOLAR SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-SETE-LAGOAS.pdf'>INSPETOR ESCOLAR SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-TEOFILO-OTONI.pdf'>INSPETOR ESCOLAR TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-UBA.pdf'>INSPETOR ESCOLAR UBA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-UBERABA.pdf'>INSPETOR ESCOLAR UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-UBERLANDIA.pdf'>INSPETOR ESCOLAR UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-UNAI.pdf'>INSPETOR ESCOLAR UNAI</a>
-<a class='botao' href='visualizar.html?pdf=INSPETOR-ESCOLAR-VARGINHA.pdf'>INSPETOR ESCOLAR VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-ALMENARA.pdf'>MATEMATICA ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-ARACUAI.pdf'>MATEMATICA ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-BARBACENA.pdf'>MATEMATICA BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-CAMPO-BELO.pdf'>MATEMATICA CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-CARANGOLA.pdf'>MATEMATICA CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-CARATINGA.pdf'>MATEMATICA CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-CAXAMBU.pdf'>MATEMATICA CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-CONSELHEIRO-LAFAIETE.pdf'>MATEMATICA CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-CORONEL-FABRICIANO.pdf'>MATEMATICA CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-CURVELO.pdf'>MATEMATICA CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-DIAMANTINA.pdf'>MATEMATICA DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-DIVINOPOLIS.pdf'>MATEMATICA DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-GOVERNADOR-VALADARES.pdf'>MATEMATICA GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-GUANHAES.pdf'>MATEMATICA GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-ITAJUBA.pdf'>MATEMATICA ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-ITUIUTABA.pdf'>MATEMATICA ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-JANAUBA.pdf'>MATEMATICA JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-JANUARIA.pdf'>MATEMATICA JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-JUIZ-DE-FORA.pdf'>MATEMATICA JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-LEOPOLDINA.pdf'>MATEMATICA LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-MANHUACU.pdf'>MATEMATICA MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-METROPOLITANA-A.pdf'>MATEMATICA METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-METROPOLITANA-B.pdf'>MATEMATICA METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-METROPOLITANA-C.pdf'>MATEMATICA METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-MONTE-CARMELO.pdf'>MATEMATICA MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-MONTES-CLAROS.pdf'>MATEMATICA MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-MURIAE.pdf'>MATEMATICA MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-NOVA-ERA.pdf'>MATEMATICA NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-OURO-PRETO.pdf'>MATEMATICA OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-PARACATU.pdf'>MATEMATICA PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-PARA-DE-MINAS.pdf'>MATEMATICA PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-PASSOS.pdf'>MATEMATICA PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-PATOS-DE-MINAS.pdf'>MATEMATICA PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-PATROCINIO.pdf'>MATEMATICA PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-PIRAPORA.pdf'>MATEMATICA PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-POCOS-DE-CALDAS.pdf'>MATEMATICA POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-PONTE-NOVA.pdf'>MATEMATICA PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-POUSO-ALEGRE.pdf'>MATEMATICA POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-SAO-JOAO-DEL-REI.pdf'>MATEMATICA SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-SAO-SEBASTIAO-DO-PARAISO.pdf'>MATEMATICA SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-SETE-LAGOAS.pdf'>MATEMATICA SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-TEOFILO-OTONI.pdf'>MATEMATICA TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-UBA.pdf'>MATEMATICA UBA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-UBERABA.pdf'>MATEMATICA UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-UBERLANDIA.pdf'>MATEMATICA UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-UNAI.pdf'>MATEMATICA UNAI</a>
-<a class='botao' href='visualizar.html?pdf=MATEMATICA-VARGINHA.pdf'>MATEMATICA VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-ALMENARA.pdf'>NUTRICIONISTA ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-ARACUAI.pdf'>NUTRICIONISTA ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-BARBACENA.pdf'>NUTRICIONISTA BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-CAMPO-BELO.pdf'>NUTRICIONISTA CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-CARANGOLA.pdf'>NUTRICIONISTA CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-CARATINGA.pdf'>NUTRICIONISTA CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-CAXAMBU.pdf'>NUTRICIONISTA CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-CONSELHEIRO-LAFAIETE.pdf'>NUTRICIONISTA CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-CORONEL-FABRICIANO.pdf'>NUTRICIONISTA CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-CURVELO.pdf'>NUTRICIONISTA CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-DIAMANTINA.pdf'>NUTRICIONISTA DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-DIVINOPOLIS.pdf'>NUTRICIONISTA DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-GOVERNADOR-VALADARES.pdf'>NUTRICIONISTA GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-GUANHAES.pdf'>NUTRICIONISTA GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-ITAJUBA.pdf'>NUTRICIONISTA ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-ITUIUTABA.pdf'>NUTRICIONISTA ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-JANAUBA.pdf'>NUTRICIONISTA JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-JANUARIA.pdf'>NUTRICIONISTA JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-JUIZ-DE-FORA.pdf'>NUTRICIONISTA JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-LEOPOLDINA.pdf'>NUTRICIONISTA LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-MANHUACU.pdf'>NUTRICIONISTA MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-METROPOLITANA-A.pdf'>NUTRICIONISTA METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-METROPOLITANA-B.pdf'>NUTRICIONISTA METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-METROPOLITANA-C.pdf'>NUTRICIONISTA METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-MONTE-CARMELO.pdf'>NUTRICIONISTA MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-MONTES-CLAROS.pdf'>NUTRICIONISTA MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-MURIAE.pdf'>NUTRICIONISTA MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-NOVA-ERA.pdf'>NUTRICIONISTA NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-OURO-PRETO.pdf'>NUTRICIONISTA OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-PARACATU.pdf'>NUTRICIONISTA PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-PARA-DE-MINAS.pdf'>NUTRICIONISTA PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-PASSOS.pdf'>NUTRICIONISTA PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-PATOS-DE-MINAS.pdf'>NUTRICIONISTA PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-PATROCINIO.pdf'>NUTRICIONISTA PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-PIRAPORA.pdf'>NUTRICIONISTA PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-POCOS-DE-CALDAS.pdf'>NUTRICIONISTA POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-PONTE-NOVA.pdf'>NUTRICIONISTA PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-POUSO-ALEGRE.pdf'>NUTRICIONISTA POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-SAO-JOAO-DEL-REI.pdf'>NUTRICIONISTA SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-SAO-SEBASTIAO-DO-PARAISO.pdf'>NUTRICIONISTA SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-SETE-LAGOAS.pdf'>NUTRICIONISTA SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-TEOFILO-OTONI.pdf'>NUTRICIONISTA TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-UBA.pdf'>NUTRICIONISTA UBA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-UBERABA.pdf'>NUTRICIONISTA UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-UBERLANDIA.pdf'>NUTRICIONISTA UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-UNAI.pdf'>NUTRICIONISTA UNAI</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-UNIDADE-CENTRAL.pdf'>NUTRICIONISTA UNIDADE CENTRAL</a>
-<a class='botao' href='visualizar.html?pdf=NUTRICIONISTA-VARGINHA.pdf'>NUTRICIONISTA VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-ALMENARA.pdf'>PORTUGUES ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-ARACUAI.pdf'>PORTUGUES ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-BARBACENA.pdf'>PORTUGUES BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-CAMPO-BELO.pdf'>PORTUGUES CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-CARANGOLA.pdf'>PORTUGUES CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-CARATINGA.pdf'>PORTUGUES CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-CAXAMBU.pdf'>PORTUGUES CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-CONSELHEIRO-LAFAIETE.pdf'>PORTUGUES CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-CORONEL-FABRICIANO.pdf'>PORTUGUES CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-CURVELO.pdf'>PORTUGUES CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-DIAMANTINA.pdf'>PORTUGUES DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-DIVINOPOLIS.pdf'>PORTUGUES DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-GOVERNADOR-VALADARES.pdf'>PORTUGUES GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-GUANHAES.pdf'>PORTUGUES GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-ITAJUBA.pdf'>PORTUGUES ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-ITUIUTABA.pdf'>PORTUGUES ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-JANAUBA.pdf'>PORTUGUES JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-JANUARIA.pdf'>PORTUGUES JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-JUIZ-DE-FORA.pdf'>PORTUGUES JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-LEOPOLDINA.pdf'>PORTUGUES LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-MANHUACU.pdf'>PORTUGUES MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-METROPOLITANA-A.pdf'>PORTUGUES METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-METROPOLITANA-B.pdf'>PORTUGUES METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-METROPOLITANA-C.pdf'>PORTUGUES METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-MONTE-CARMELO.pdf'>PORTUGUES MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-MONTES-CLAROS.pdf'>PORTUGUES MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-MURIAE.pdf'>PORTUGUES MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-NOVA-ERA.pdf'>PORTUGUES NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-OURO-PRETO.pdf'>PORTUGUES OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-PARACATU.pdf'>PORTUGUES PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-PARA-DE-MINAS.pdf'>PORTUGUES PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-PASSOS.pdf'>PORTUGUES PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-PATOS-DE-MINAS.pdf'>PORTUGUES PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-PATROCINIO.pdf'>PORTUGUES PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-PIRAPORA.pdf'>PORTUGUES PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-POCOS-DE-CALDAS.pdf'>PORTUGUES POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-PONTE-NOVA.pdf'>PORTUGUES PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-POUSO-ALEGRE.pdf'>PORTUGUES POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-SAO-JOAO-DEL-REI.pdf'>PORTUGUES SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-SAO-SEBASTIAO-DO-PARAISO.pdf'>PORTUGUES SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-SETE-LAGOAS.pdf'>PORTUGUES SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-TEOFILO-OTONI.pdf'>PORTUGUES TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-UBA.pdf'>PORTUGUES UBA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-UBERABA.pdf'>PORTUGUES UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-UBERLANDIA.pdf'>PORTUGUES UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-UNAI.pdf'>PORTUGUES UNAI</a>
-<a class='botao' href='visualizar.html?pdf=PORTUGUES-VARGINHA.pdf'>PORTUGUES VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-ALMENARA.pdf'>PSICOLOGO ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-ARACUAI.pdf'>PSICOLOGO ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-BARBACENA.pdf'>PSICOLOGO BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-CAMPO-BELO.pdf'>PSICOLOGO CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-CARANGOLA.pdf'>PSICOLOGO CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-CARATINGA.pdf'>PSICOLOGO CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-CAXAMBU.pdf'>PSICOLOGO CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-CONSELHEIRO-LAFAIETE.pdf'>PSICOLOGO CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-CORONEL-FABRICIANO.pdf'>PSICOLOGO CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-CURVELO.pdf'>PSICOLOGO CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-DIAMANTINA.pdf'>PSICOLOGO DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-DIVINOPOLIS.pdf'>PSICOLOGO DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-GOVERNADOR-VALADARES.pdf'>PSICOLOGO GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-GUANHAES.pdf'>PSICOLOGO GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-ITAJUBA.pdf'>PSICOLOGO ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-ITUIUTABA.pdf'>PSICOLOGO ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-JANAUBA.pdf'>PSICOLOGO JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-JANUARIA.pdf'>PSICOLOGO JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-JUIZ-DE-FORA.pdf'>PSICOLOGO JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-LEOPOLDINA.pdf'>PSICOLOGO LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-MANHUACU.pdf'>PSICOLOGO MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-METROPOLITANA-A.pdf'>PSICOLOGO METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-METROPOLITANA-B.pdf'>PSICOLOGO METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-METROPOLITANA-C.pdf'>PSICOLOGO METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-MONTE-CARMELO.pdf'>PSICOLOGO MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-MONTES-CLAROS.pdf'>PSICOLOGO MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-MURIAE.pdf'>PSICOLOGO MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-NOVA-ERA.pdf'>PSICOLOGO NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-OURO-PRETO.pdf'>PSICOLOGO OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-PARACATU.pdf'>PSICOLOGO PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-PARA-DE-MINAS.pdf'>PSICOLOGO PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-PASSOS.pdf'>PSICOLOGO PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-PATOS-DE-MINAS.pdf'>PSICOLOGO PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-PATROCINIO.pdf'>PSICOLOGO PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-PIRAPORA.pdf'>PSICOLOGO PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-POCOS-DE-CALDAS.pdf'>PSICOLOGO POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-PONTE-NOVA.pdf'>PSICOLOGO PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-POUSO-ALEGRE.pdf'>PSICOLOGO POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-SAO-JOAO-DEL-REI.pdf'>PSICOLOGO SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-SAO-SEBASTIAO-DO-PARAISO.pdf'>PSICOLOGO SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-SETE-LAGOAS.pdf'>PSICOLOGO SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-TEOFILO-OTONI.pdf'>PSICOLOGO TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-UBA.pdf'>PSICOLOGO UBA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-UBERABA.pdf'>PSICOLOGO UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-UBERLANDIA.pdf'>PSICOLOGO UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-UNAI.pdf'>PSICOLOGO UNAI</a>
-<a class='botao' href='visualizar.html?pdf=PSICOLOGO-VARGINHA.pdf'>PSICOLOGO VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-ALMENARA.pdf'>QUIMICA ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-ARACUAI.pdf'>QUIMICA ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-BARBACENA.pdf'>QUIMICA BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-CAMPO-BELO.pdf'>QUIMICA CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-CARANGOLA.pdf'>QUIMICA CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-CARATINGA.pdf'>QUIMICA CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-CAXAMBU.pdf'>QUIMICA CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-CONSELHEIRO-LAFAIETE.pdf'>QUIMICA CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-CORONEL-FABRICIANO.pdf'>QUIMICA CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-CURVELO.pdf'>QUIMICA CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-DIAMANTINA.pdf'>QUIMICA DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-DIVINOPOLIS.pdf'>QUIMICA DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-GOVERNADOR-VALADARES.pdf'>QUIMICA GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-GUANHAES.pdf'>QUIMICA GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-ITAJUBA.pdf'>QUIMICA ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-ITUIUTABA.pdf'>QUIMICA ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-JANAUBA.pdf'>QUIMICA JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-JANUARIA.pdf'>QUIMICA JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-JUIZ-DE-FORA.pdf'>QUIMICA JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-LEOPOLDINA.pdf'>QUIMICA LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-MANHUACU.pdf'>QUIMICA MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-METROPOLITANA-A.pdf'>QUIMICA METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-METROPOLITANA-B.pdf'>QUIMICA METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-METROPOLITANA-C.pdf'>QUIMICA METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-MONTE-CARMELO.pdf'>QUIMICA MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-MONTES-CLAROS.pdf'>QUIMICA MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-MURIAE.pdf'>QUIMICA MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-NOVA-ERA.pdf'>QUIMICA NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-OURO-PRETO.pdf'>QUIMICA OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-PARACATU.pdf'>QUIMICA PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-PARA-DE-MINAS.pdf'>QUIMICA PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-PASSOS.pdf'>QUIMICA PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-PATOS-DE-MINAS.pdf'>QUIMICA PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-PATROCINIO.pdf'>QUIMICA PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-PIRAPORA.pdf'>QUIMICA PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-POCOS-DE-CALDAS.pdf'>QUIMICA POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-PONTE-NOVA.pdf'>QUIMICA PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-POUSO-ALEGRE.pdf'>QUIMICA POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-SAO-JOAO-DEL-REI.pdf'>QUIMICA SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-SAO-SEBASTIAO-DO-PARAISO.pdf'>QUIMICA SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-SETE-LAGOAS.pdf'>QUIMICA SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-TEOFILO-OTONI.pdf'>QUIMICA TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-UBA.pdf'>QUIMICA UBA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-UBERABA.pdf'>QUIMICA UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-UBERLANDIA.pdf'>QUIMICA UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-UNAI.pdf'>QUIMICA UNAI</a>
-<a class='botao' href='visualizar.html?pdf=QUIMICA-VARGINHA.pdf'>QUIMICA VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-ALMENARA.pdf'>SOCIOLOGIA ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-ARACUAI.pdf'>SOCIOLOGIA ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-BARBACENA.pdf'>SOCIOLOGIA BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-CAMPO-BELO.pdf'>SOCIOLOGIA CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-CARANGOLA.pdf'>SOCIOLOGIA CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-CARATINGA.pdf'>SOCIOLOGIA CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-CAXAMBU.pdf'>SOCIOLOGIA CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-CONSELHEIRO-LAFAIETE.pdf'>SOCIOLOGIA CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-CORONEL-FABRICIANO.pdf'>SOCIOLOGIA CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-CURVELO.pdf'>SOCIOLOGIA CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-DIAMANTINA.pdf'>SOCIOLOGIA DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-DIVINOPOLIS.pdf'>SOCIOLOGIA DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-GOVERNADOR-VALADARES.pdf'>SOCIOLOGIA GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-GUANHAES.pdf'>SOCIOLOGIA GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-ITAJUBA.pdf'>SOCIOLOGIA ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-ITUIUTABA.pdf'>SOCIOLOGIA ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-JANAUBA.pdf'>SOCIOLOGIA JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-JANUARIA.pdf'>SOCIOLOGIA JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-JUIZ-DE-FORA.pdf'>SOCIOLOGIA JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-LEOPOLDINA.pdf'>SOCIOLOGIA LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-MANHUACU.pdf'>SOCIOLOGIA MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-METROPOLITANA-A.pdf'>SOCIOLOGIA METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-METROPOLITANA-B.pdf'>SOCIOLOGIA METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-METROPOLITANA-C.pdf'>SOCIOLOGIA METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-MONTE-CARMELO.pdf'>SOCIOLOGIA MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-MONTES-CLAROS.pdf'>SOCIOLOGIA MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-MURIAE.pdf'>SOCIOLOGIA MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-NOVA-ERA.pdf'>SOCIOLOGIA NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-OURO-PRETO.pdf'>SOCIOLOGIA OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-PARACATU.pdf'>SOCIOLOGIA PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-PARA-DE-MINAS.pdf'>SOCIOLOGIA PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-PASSOS.pdf'>SOCIOLOGIA PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-PATOS-DE-MINAS.pdf'>SOCIOLOGIA PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-PATROCINIO.pdf'>SOCIOLOGIA PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-PIRAPORA.pdf'>SOCIOLOGIA PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-POCOS-DE-CALDAS.pdf'>SOCIOLOGIA POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-PONTE-NOVA.pdf'>SOCIOLOGIA PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-POUSO-ALEGRE.pdf'>SOCIOLOGIA POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-SAO-JOAO-DEL-REI.pdf'>SOCIOLOGIA SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-SAO-SEBASTIAO-DO-PARAISO.pdf'>SOCIOLOGIA SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-SETE-LAGOAS.pdf'>SOCIOLOGIA SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-TEOFILO-OTONI.pdf'>SOCIOLOGIA TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-UBA.pdf'>SOCIOLOGIA UBA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-UBERABA.pdf'>SOCIOLOGIA UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-UBERLANDIA.pdf'>SOCIOLOGIA UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-UNAI.pdf'>SOCIOLOGIA UNAI</a>
-<a class='botao' href='visualizar.html?pdf=SOCIOLOGIA-VARGINHA.pdf'>SOCIOLOGIA VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-ALMENARA.pdf'>TDE ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-ARACUAI.pdf'>TDE ARACUAI</a>
-<a class='botao' href='visualizar.html?pdf=TDE-BARBACENA.pdf'>TDE BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-CAMPO-BELO.pdf'>TDE CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=TDE-CARANGOLA.pdf'>TDE CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-CARATINGA.pdf'>TDE CARATINGA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-CAXAMBU.pdf'>TDE CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=TDE-CONSELHEIRO-LAFAIETE.pdf'>TDE CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=TDE-CORONEL-FABRICIANO.pdf'>TDE CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=TDE-CURVELO.pdf'>TDE CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=TDE-DIAMANTINA.pdf'>TDE DIAMANTINA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-DIVINOPOLIS.pdf'>TDE DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=TDE-GOVERNADOR-VALADARES.pdf'>TDE GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=TDE-GUANHAES.pdf'>TDE GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=TDE-ITAJUBA.pdf'>TDE ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-ITUIUTABA.pdf'>TDE ITUIUTABA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-JANAUBA.pdf'>TDE JANAUBA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-JANUARIA.pdf'>TDE JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-JUIZ-DE-FORA.pdf'>TDE JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-LEOPOLDINA.pdf'>TDE LEOPOLDINA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-MANHUACU.pdf'>TDE MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=TDE-METROPOLITANA-A.pdf'>TDE METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=TDE-METROPOLITANA-B.pdf'>TDE METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=TDE-METROPOLITANA-C.pdf'>TDE METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=TDE-MONTE-CARMELO.pdf'>TDE MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=TDE-MONTES-CLAROS.pdf'>TDE MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=TDE-MURIAE.pdf'>TDE MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=TDE-NOVA-ERA.pdf'>TDE NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-OURO-PRETO.pdf'>TDE OURO PRETO</a>
-<a class='botao' href='visualizar.html?pdf=TDE-PARACATU.pdf'>TDE PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=TDE-PARA-DE-MINAS.pdf'>TDE PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=TDE-PASSOS.pdf'>TDE PASSOS</a>
-<a class='botao' href='visualizar.html?pdf=TDE-PATOS-DE-MINAS.pdf'>TDE PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=TDE-PATROCINIO.pdf'>TDE PATROCINIO</a>
-<a class='botao' href='visualizar.html?pdf=TDE-PIRAPORA.pdf'>TDE PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-POCOS-DE-CALDAS.pdf'>TDE POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=TDE-PONTE-NOVA.pdf'>TDE PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-POUSO-ALEGRE.pdf'>TDE POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=TDE-SAO-JOAO-DEL-REI.pdf'>TDE SAO JOAO DEL REI</a>
-<a class='botao' href='visualizar.html?pdf=TDE-SAO-SEBASTIAO-DO-PARAISO.pdf'>TDE SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=TDE-SETE-LAGOAS.pdf'>TDE SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=TDE-TEOFILO-OTONI.pdf'>TDE TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=TDE-UBA.pdf'>TDE UBA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-UBERABA.pdf'>TDE UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-UBERLANDIA.pdf'>TDE UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=TDE-UNAI.pdf'>TDE UNAI</a>
-<a class='botao' href='visualizar.html?pdf=TDE-UNIDADE-CENTRAL.pdf'>TDE UNIDADE CENTRAL</a>
-<a class='botao' href='visualizar.html?pdf=TDE-VARGINHA.pdf'>TDE VARGINHA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-ALMENARA.pdf'>TERAPEUTA OCUPACIONAL ALMENARA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-BARBACENA.pdf'>TERAPEUTA OCUPACIONAL BARBACENA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-CAMPO-BELO.pdf'>TERAPEUTA OCUPACIONAL CAMPO BELO</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-CARANGOLA.pdf'>TERAPEUTA OCUPACIONAL CARANGOLA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-CAXAMBU.pdf'>TERAPEUTA OCUPACIONAL CAXAMBU</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-CONSELHEIRO-LAFAIETE.pdf'>TERAPEUTA OCUPACIONAL CONSELHEIRO LAFAIETE</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-CORONEL-FABRICIANO.pdf'>TERAPEUTA OCUPACIONAL CORONEL FABRICIANO</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-CURVELO.pdf'>TERAPEUTA OCUPACIONAL CURVELO</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-DIVINOPOLIS.pdf'>TERAPEUTA OCUPACIONAL DIVINOPOLIS</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-GOVERNADOR-VALADARES.pdf'>TERAPEUTA OCUPACIONAL GOVERNADOR VALADARES</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-GUANHAES.pdf'>TERAPEUTA OCUPACIONAL GUANHAES</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-ITAJUBA.pdf'>TERAPEUTA OCUPACIONAL ITAJUBA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-JANUARIA.pdf'>TERAPEUTA OCUPACIONAL JANUARIA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-JUIZ-DE-FORA.pdf'>TERAPEUTA OCUPACIONAL JUIZ DE FORA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-MANHUACU.pdf'>TERAPEUTA OCUPACIONAL MANHUACU</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-METROPOLITANA-A.pdf'>TERAPEUTA OCUPACIONAL METROPOLITANA A</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-METROPOLITANA-B.pdf'>TERAPEUTA OCUPACIONAL METROPOLITANA B</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-METROPOLITANA-C.pdf'>TERAPEUTA OCUPACIONAL METROPOLITANA C</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-MONTE-CARMELO.pdf'>TERAPEUTA OCUPACIONAL MONTE CARMELO</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-MONTES-CLAROS.pdf'>TERAPEUTA OCUPACIONAL MONTES CLAROS</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-MURIAE.pdf'>TERAPEUTA OCUPACIONAL MURIAE</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-NOVA-ERA.pdf'>TERAPEUTA OCUPACIONAL NOVA ERA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-PARACATU.pdf'>TERAPEUTA OCUPACIONAL PARACATU</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-PARA-DE-MINAS.pdf'>TERAPEUTA OCUPACIONAL PARA DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-PATOS-DE-MINAS.pdf'>TERAPEUTA OCUPACIONAL PATOS DE MINAS</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-PIRAPORA.pdf'>TERAPEUTA OCUPACIONAL PIRAPORA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-POCOS-DE-CALDAS.pdf'>TERAPEUTA OCUPACIONAL POCOS DE CALDAS</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-PONTE-NOVA.pdf'>TERAPEUTA OCUPACIONAL PONTE NOVA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-POUSO-ALEGRE.pdf'>TERAPEUTA OCUPACIONAL POUSO ALEGRE</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-SAO-SEBASTIAO-DO-PARAISO.pdf'>TERAPEUTA OCUPACIONAL SAO SEBASTIAO DO PARAISO</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-SETE-LAGOAS.pdf'>TERAPEUTA OCUPACIONAL SETE LAGOAS</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-TEOFILO-OTONI.pdf'>TERAPEUTA OCUPACIONAL TEOFILO OTONI</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-UBA.pdf'>TERAPEUTA OCUPACIONAL UBA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-UBERABA.pdf'>TERAPEUTA OCUPACIONAL UBERABA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-UBERLANDIA.pdf'>TERAPEUTA OCUPACIONAL UBERLANDIA</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-UNAI.pdf'>TERAPEUTA OCUPACIONAL UNAI</a>
-<a class='botao' href='visualizar.html?pdf=TERAPEUTA-OCUPACIONAL-VARGINHA.pdf'>TERAPEUTA OCUPACIONAL VARGINHA</a>
-</div></div>
-</body></html>
+
+<div id="loading">Carregando dados…</div>
+
+<div id="erro-container">
+<p>Não foi possível carregar automaticamente.</p>
+<input type="file" accept=".csv" onchange="carregarManualmente(this)">
+</div>
+
+<p id="resultado-msg"></p>
+
+<div id="tabela-container" style="display:none" class="table-wrap">
+<table>
+<thead>
+<tr>
+<th>ORDEM</th><th>NOME</th><th>CARGO</th><th>SRE</th>
+<th>OBJETIVA</th><th>REDAÇÃO</th><th>TÍTULOS</th>
+<th>TOTAL</th><th>SITUAÇÃO</th>
+</tr>
+</thead>
+<tbody id="tbody-resultados"></tbody>
+</table>
+</div>
+
+</div>
+
+<footer>
+💙 Sua doação mantém o projeto ativo e em constante melhoria.<br>
+<strong>Chave Pix:</strong> pauloguimor@yahoo.com.br<br>
+
+(qualquer valor faz diferença)<br>
+
+<button class="pix-btn" onclick="copiarPix()">💚 Copiar Pix</button>
+</footer>
+
+<script>
+let todosDados = [];
+
+window.onload = function() {
+  Papa.parse("dados.csv", {
+    download:true,
+    header:true,
+    skipEmptyLines:true,
+    encoding:"ISO-8859-1",
+    complete:r=>sucessoCarregamento(r.data),
+    error:()=>{
+      document.getElementById('loading').style.display='none';
+      document.getElementById('erro-container').style.display='block';
+    }
+  });
+};
+
+function carregarManualmente(input){
+  if(input.files.length>0){
+    Papa.parse(input.files[0],{
+      header:true,
+      skipEmptyLines:true,
+      encoding:"ISO-8859-1",
+      complete:r=>sucessoCarregamento(r.data)
+    });
+  }
+}
+
+function sucessoCarregamento(dados){
+  todosDados=dados;
+  document.getElementById('loading').style.display='none';
+
+  const cargos=new Set(), sres=new Set();
+  dados.forEach(l=>{
+    if(l.CARGO) cargos.add(l.CARGO.trim());
+    if(l.SRE) sres.add(l.SRE.trim());
+  });
+
+  preencherSelect("selCargo",[...cargos].sort(),"Selecione o Cargo");
+  preencherSelect("selSRE",[...sres].sort(),"Selecione a SRE");
+
+  selCargo.disabled=false;
+  selSRE.disabled=false;
+}
+
+function preencherSelect(id,lista,txt){
+  const s=document.getElementById(id);
+  s.innerHTML=`<option value="">${txt}</option>`;
+  lista.forEach(v=>s.innerHTML+=`<option>${v}</option>`);
+}
+
+function aplicarFiltro(){
+  const cargo=selCargo.value, sre=selSRE.value;
+  if(!cargo||!sre){alert("Selecione Cargo e SRE");return;}
+
+  const filtrados=todosDados.filter(d=>
+    d.CARGO?.trim()==cargo && d.SRE?.trim()==sre &&
+    d.NOME.toLowerCase().includes(busca.value.toLowerCase())
+  );
+
+  const tbody=document.getElementById("tbody-resultados");
+  tbody.innerHTML="";
+  document.getElementById("tabela-container").style.display="block";
+
+  document.getElementById("resultado-msg").innerText=
+    filtrados.length+" resultados encontrados.";
+
+  filtrados.forEach(d=>{
+    const cls=d.SITUACAO?.toLowerCase().includes("aprovado")?
+      "status-aprovado":"status-outro";
+    tbody.insertAdjacentHTML("beforeend",`
+      <tr>
+        <td>${d.ORDEM}</td>
+        <td><strong>${d.NOME}</strong></td>
+        <td>${d.CARGO}</td>
+        <td>${d.SRE}</td>
+        <td>${d.OBJETIVA||"-"}</td>
+        <td>${d.REDACAO||"-"}</td>
+        <td>${d.TITULOS||"-"}</td>
+        <td><b>${d.TOTAL}</b></td>
+        <td><span class="${cls}">${d.SITUACAO}</span></td>
+      </tr>
+    `);
+  });
+}
+
+function copiarPix(){
+  navigator.clipboard.writeText("pauloguimor@yahoo.com.br");
+  alert("Chave PIX copiada!");
+}
+</script>
+
+</body>
+</html>
