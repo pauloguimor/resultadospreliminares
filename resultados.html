@@ -65,6 +65,7 @@ Papa.parse("dados.csv",{download:true,header:true,skipEmptyLines:true,encoding:"
 complete:r=>sucessoCarregamento(r.data)});
 };
 function sucessoCarregamento(dados){
+document.getElementById('loading').style.display = 'none';
 todosDados=dados;
 const cargos=new Set(),sres=new Set();
 dados.forEach(l=>{if(l.CARGO)cargos.add(l.CARGO.trim());if(l.SRE)sres.add(l.SRE.trim());});
