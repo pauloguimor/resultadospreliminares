@@ -6,6 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
 <style>
+
 body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8}
 header,footer{position:fixed;left:0;right:0;background:#0b3c6d;color:#fff;z-index:100}
 header{top:0;padding:12px;text-align:center;font-size:18px;font-weight:bold}
@@ -22,7 +23,25 @@ th{background:#eee;position:sticky;top:0}
 .status-outro{background:#aaa;color:#fff;padding:3px 6px;border-radius:6px}
 .pix-btn{background:#2ecc71;color:#fff;border:none;padding:6px 12px;border-radius:6px;font-size:14px;cursor:pointer;margin-top:4px}
 @media(max-width:768px){table{min-width:700px}th,td{font-size:12px;padding:6px}}
+
+a.btn-painel,
+a.btn-painel:visited,
+a.btn-painel:hover,
+a.btn-painel:active {
+  display: inline-block;
+  background: linear-gradient(135deg, #FFFFFF, #FFFFFF);
+  color: #1a1a1a !important;
+  padding: 7px 14px;
+  border-radius: 7px;
+  font-size: 7px;
+  font-weight: 800;
+  text-decoration: none !important;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+  border: 2px solid rgba(255,255,255,0.4);
+}
+
 </style>
+
 </head>
 <body>
 <header>Resultados – SEE/MG</header>
@@ -57,7 +76,14 @@ th{background:#eee;position:sticky;top:0}
 <strong>Dúvidas?</strong>
 <a href="https://wa.me/5535992424677?text=Olá,%20tenho%20uma%20dúvida%20sobre%20os%20resultados."
 target="_blank" style="color:#25D366;font-weight:bold;text-decoration:none;"> WhatsApp</a>
+<a 
+  href="https://dados.educacao.mg.gov.br/dashboard/185a42ef-8f35-4102-96d7-ccbd2f7592f1?fbclid=IwY2xjawPnp1xleHRuA2FlbQIxMABicmlkETFTNFNic1NVREFHeFJldGU2c3J0YwZhcHBfaWQQMjIyMDM5MTc4ODIwMDg5MgABHs_Y4RZ5iZ1KLvh6volvwYtv6grg0TkV7rtMxjcJU0YIlbBviWp8T6gVC6Yg_aem_MgE4CEiQe94MOhAU-e7qow"
+  target="_blank"
+  class="btn-painel"
+>
+  📊 Acesse o Painel de Vagas</a>
 </footer>
+
 <script>
 let todosDados=[];
 window.onload=function(){
