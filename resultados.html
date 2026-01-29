@@ -111,10 +111,11 @@ function normalizarTexto(txt) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 function aplicarFiltro(){
-busca.value="";busca.disabled=true;
 const cargo=selCargo.value,sre=selSRE.value;
-if(!cargo||!sre){alert("Selecione Cargo e SRE");return;}
-const filtrados=todosDados.filter(d=>d.CARGO?.trim()==cargo&&d.SRE?.trim()==sre);
+if(!cargo||!sre){
+  alert("Selecione Cargo e SRE");
+  return;
+}const filtrados=todosDados.filter(d=>d.CARGO?.trim()==cargo&&d.SRE?.trim()==sre);
 const tbody=document.getElementById("tbody-resultados");
 tbody.innerHTML="";
 document.getElementById("tabela-container").style.display="block";
@@ -128,15 +129,14 @@ tbody.insertAdjacentHTML("beforeend",`<tr>
 });
 busca.disabled=false;
 busca.oninput=function(){
-const t = normalizarTexto(this.value);
+  const t = normalizarTexto(this.value);
 
-[...tbody.rows].forEach(r => {
-  const nome = normalizarTexto(r.cells[1].innerText);
-  r.style.display = nome.includes(t) ? "" : "none";
-});
+  [...tbody.rows].forEach(r => {
+    const nome = normalizarTexto(r.cells[1].innerText);
+    r.style.display = nome.includes(t) ? "" : "none";
+  });
 };
-}
-function copiarPix(){navigator.clipboard.writeText("pauloguimor@yahoo.com.br");alert("Chave PIX copiada!");}
+}function copiarPix(){navigator.clipboard.writeText("pauloguimor@yahoo.com.br");alert("Chave PIX copiada!");}
 </script>
 </body>
 </html>
