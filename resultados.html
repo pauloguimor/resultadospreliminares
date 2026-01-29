@@ -122,9 +122,11 @@ tbody.insertAdjacentHTML("beforeend",`<tr>
 });
 busca.disabled=false;
 busca.oninput=function(){
-const t=this.value.toLowerCase();
-[...tbody.rows].forEach(r=>{
-r.style.display=r.cells[1].innerText.toLowerCase().includes(t)?"":"none";
+const t = normalizarTexto(this.value);
+
+[...tbody.rows].forEach(r => {
+  const nome = normalizarTexto(r.cells[1].innerText);
+  r.style.display = nome.includes(t) ? "" : "none";
 });
 };
 }
