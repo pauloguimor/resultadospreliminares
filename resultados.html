@@ -104,6 +104,12 @@ const s=document.getElementById(id);
 s.innerHTML=`<option value="">${txt}</option>`;
 lista.forEach(v=>s.innerHTML+=`<option>${v}</option>`);
 }
+function normalizarTexto(txt) {
+  return txt
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "");
+}
 function aplicarFiltro(){
 busca.value="";busca.disabled=true;
 const cargo=selCargo.value,sre=selSRE.value;
