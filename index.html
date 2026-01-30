@@ -7,15 +7,15 @@
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-
   gtag('config', 'G-XPDH340MT4');
 </script>
+
 <meta charset="UTF-8">
 <title>Resultados – SEE/MG</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
-<style>
 
+<style>
 body{margin:0;font-family:Arial,sans-serif;background:#f4f6f8}
 header,footer{position:fixed;left:0;right:0;background:#0b3c6d;color:#fff;z-index:100}
 header{top:0;padding:12px;text-align:center;font-size:18px;font-weight:bold}
@@ -49,20 +49,51 @@ a.btn-painel:active {
   border: 2px solid rgba(255,255,255,0.4);
 }
 
+/* POP-UP PIX (NOVO) */
+.popup-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.6);
+  display:none;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+.popup-content{
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  max-width:380px;
+  width:90%;
+  text-align:center;
+}
+.popup-content button{
+  margin:8px 5px;
+  padding:10px 15px;
+  border:none;
+  border-radius:6px;
+  font-size:14px;
+  cursor:pointer;
+}
+.btn-copiar{background:#2ecc71;color:#fff}
+.btn-ok{background:#0b3c6d;color:#fff}
 </style>
-
 </head>
+
 <body>
 <header>Resultados – SEE/MG</header>
+
 <div class="container">
 <div class="controls">
 <select id="selCargo" disabled></select>
 <select id="selSRE" disabled></select>
 <input id="busca" placeholder="Digite o nome do candidato" disabled>
-<button onclick="aplicarFiltro()">Ver Resultado</button>
+<button onclick="abrirPopupPix()">Ver Resultado</button>
 </div>
+
 <div id="loading">Carregando dados…</div>
 <p id="resultado-msg"></p>
+
 <div id="tabela-container" style="display:none" class="table-wrap">
 <table>
 <thead>
@@ -76,6 +107,7 @@ a.btn-painel:active {
 </table>
 </div>
 </div>
+
 <footer>
 💙 Sua contribuição mantém o projeto ativo.<br>
 <strong>Pix:</strong> pauloguimor@yahoo.com.br
@@ -93,14 +125,25 @@ target="_blank" style="color:#25D366;font-weight:bold;text-decoration:none;"> Wh
   📊 Acesse o Painel de Vagas</a>
 </footer>
 
+<!-- POP-UP PIX -->
+<div id="popupPix" class="popup-overlay">
+  <div class="popup-content">
+    <p><strong>Se essa página te ajudou, considere fazer uma contribuição via Pix:</strong></p>
+    <p><strong>pauloguimor@yahoo.com.br</strong></p>
+    <button class="btn-copiar" onclick="copiarPixPopup()">📋 Copiar Pix</button>
+    <button class="btn-ok" onclick="confirmarPopup()">OK</button>
+  </div>
+</div>
+
 <script>
 let todosDados=[];
 window.onload=function(){
 Papa.parse("dados.csv",{download:true,header:true,skipEmptyLines:true,encoding:"ISO-8859-1",
 complete:r=>sucessoCarregamento(r.data)});
 };
+
 function sucessoCarregamento(dados){
-document.getElementById('loading').style.display = 'none';
+document.getElementById('loading').style.display='none';
 todosDados=dados;
 const cargos=new Set(),sres=new Set();
 dados.forEach(l=>{if(l.CARGO)cargos.add(l.CARGO.trim());if(l.SRE)sres.add(l.SRE.trim());});
@@ -108,23 +151,39 @@ preencher("selCargo",[...cargos].sort(),"Selecione o Cargo");
 preencher("selSRE",[...sres].sort(),"Selecione a SRE");
 selCargo.disabled=false;selSRE.disabled=false;
 }
+
 function preencher(id,lista,txt){
 const s=document.getElementById(id);
 s.innerHTML=`<option value="">${txt}</option>`;
 lista.forEach(v=>s.innerHTML+=`<option>${v}</option>`);
 }
-function normalizarTexto(txt) {
-  return txt
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "");
+
+function normalizarTexto(txt){
+return txt.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
 }
-function aplicarFiltro(){
+
+/* ABRE POP-UP EM VEZ DE FILTRAR DIRETO */
+function abrirPopupPix(){
 const cargo=selCargo.value,sre=selSRE.value;
 if(!cargo||!sre){
   alert("Selecione Cargo e SRE");
   return;
-}const filtrados=todosDados.filter(d=>d.CARGO?.trim()==cargo&&d.SRE?.trim()==sre);
+}
+document.getElementById("popupPix").style.display="flex";
+}
+
+/* OK DO POP-UP */
+function confirmarPopup(){
+if(typeof gtag==="function"){
+  gtag('event','popup_ok',{event_category:'engajamento'});
+}
+document.getElementById("popupPix").style.display="none";
+aplicarFiltro();
+}
+
+function aplicarFiltro(){
+const cargo=selCargo.value,sre=selSRE.value;
+const filtrados=todosDados.filter(d=>d.CARGO?.trim()==cargo&&d.SRE?.trim()==sre);
 const tbody=document.getElementById("tbody-resultados");
 tbody.innerHTML="";
 document.getElementById("tabela-container").style.display="block";
@@ -138,14 +197,28 @@ tbody.insertAdjacentHTML("beforeend",`<tr>
 });
 busca.disabled=false;
 busca.oninput=function(){
-  const t = normalizarTexto(this.value);
-
-  [...tbody.rows].forEach(r => {
-    const nome = normalizarTexto(r.cells[1].innerText);
-    r.style.display = nome.includes(t) ? "" : "none";
-  });
+const t=normalizarTexto(this.value);
+[...tbody.rows].forEach(r=>{
+const nome=normalizarTexto(r.cells[1].innerText);
+r.style.display=nome.includes(t)?"":"none";
+});
 };
-}function copiarPix(){navigator.clipboard.writeText("pauloguimor@yahoo.com.br");alert("Chave PIX copiada!");}
+}
+
+/* PIX DO RODAPÉ (INALTERADO, SEM EVENTO) */
+function copiarPix(){
+navigator.clipboard.writeText("pauloguimor@yahoo.com.br");
+alert("Chave PIX copiada!");
+}
+
+/* PIX DO POP-UP (COM EVENTO) */
+function copiarPixPopup(){
+navigator.clipboard.writeText("pauloguimor@yahoo.com.br");
+if(typeof gtag==="function"){
+  gtag('event','pix_copiado',{event_category:'doacao'});
+}
+alert("Chave PIX copiada!");
+}
 </script>
 </body>
 </html>
